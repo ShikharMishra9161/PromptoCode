@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ES2020",
     "module": "CommonJS",
-    "moduleResolution": "node10",
-    "ignoreDeprecations": "6.0",
+    "moduleResolution": "node",
+
     "lib": ["ES2020"],
     "outDir": "./dist",
     "rootDir": "./src",
+
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+
     "declaration": true,
     "sourceMap": true,
+
     "paths": {
-      "@aiuix/shared": ["../shared/src/index.ts"]
+      "@aiuix/shared": ["../shared/dist/index.d.ts"]
     }
   },
   "include": ["src/**/*"],

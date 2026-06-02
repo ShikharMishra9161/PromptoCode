@@ -70,9 +70,9 @@ const historySchema = new Schema<IHistoryDocument>(
     timestamps: true,
     toJSON: {
       transform: (_doc, ret) => {
-        ret._id = ret._id.toString();
-        ret.userId = ret.userId.toString();
-        delete ret.__v;
+       (ret as any)._id = String(ret._id);
+(ret as any).userId = String(ret.userId);
+delete (ret as any).__v;
         return ret;
       },
     },

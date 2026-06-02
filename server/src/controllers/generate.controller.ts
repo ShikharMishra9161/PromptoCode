@@ -33,7 +33,7 @@ export const generateUIController = async (
 
     // ─── Return typed response ─────────────────────────
     const response: GenerateUIResponseDTO = {
-      id: (historyEntry._id as string).toString(),
+     id: String(historyEntry._id),
       code,
       explanation,
       tokensUsed,

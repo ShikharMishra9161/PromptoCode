@@ -10,8 +10,8 @@ import { AuthResponseDTO, IUser } from '@aiuix/shared';
 const signToken = (id: string): string =>
   jwt.sign({ id }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN } as jwt.SignOptions);
 
-const toUserDTO = (user: InstanceType<typeof User>): IUser => ({
-  _id: (user._id as string).toString(),
+const toUserDTO = (user: any): IUser => ({
+  _id: user._id.toString(),
   name: user.name,
   email: user.email,
   createdAt: user.createdAt.toISOString(),
@@ -30,7 +30,7 @@ export const register = async (
     if (existing) throw new AppError('Email already in use', 409);
 
     const user = await User.create({ name, email, password });
-    const token = signToken((user._id as string).toString());
+    const token = signToken(user._id.toString());
 
     const response: AuthResponseDTO = { user: toUserDTO(user), token };
     res.status(201).json({ success: true, data: response, message: 'Account created successfully' });
@@ -53,7 +53,7 @@ export const login = async (
       throw new AppError('Invalid email or password', 401);
     }
 
-    const token = signToken((user._id as string).toString());
+    const token = signToken(user._id.toString());
     const response: AuthResponseDTO = { user: toUserDTO(user), token };
     res.json({ success: true, data: response });
   } catch (error) {
