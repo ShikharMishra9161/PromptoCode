@@ -5,6 +5,9 @@
 Built with a full-stack TypeScript monorepo: React frontend, Express backend, Google Gemini AI, MongoDB, and Zod validation.
 
 ---
+## 📸 Screenshots
+
+![App Screenshot](screenshot.png)
 
 ## ✨ Features
 
