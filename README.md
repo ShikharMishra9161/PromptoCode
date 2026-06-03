@@ -7,7 +7,7 @@ Built with a full-stack TypeScript monorepo: React frontend, Express backend, Go
 ---
 ## 📸 Screenshots
 
-![App Screenshot](<img width="782" height="404" alt="screenshot" src="https://github.com/user-attachments/assets/8cc4bc2d-34bb-4213-9715-ace6025ea8f6" />
+(<img width="782" height="404" alt="screenshot" src="https://github.com/user-attachments/assets/8cc4bc2d-34bb-4213-9715-ace6025ea8f6" />
 )
 
 ## ✨ Features
