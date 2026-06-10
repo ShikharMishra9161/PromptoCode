@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: promptocode-server
+    env: node
+    plan: free
+    branch: main
+    buildCommand: npm run build
+    startCommand: npm run start
+    # Do NOT store secrets in this file. Set sensitive values in Render dashboard.
+    envVars:
+      - key: MONGODB_URI
+        value: ""
+      - key: JWT_SECRET
+        value: ""
+      - key: GEMINI_API_KEY
+        value: ""
+      - key: GEMINI_MODEL
+        value: "gemini-1.5-flash"
+      - key: CLIENT_URL
+        value: ""
+      - key: PORT
+        value: "5000"
+      - key: NODE_ENV
+        value: "production"
+
+  - type: static
+    name: promptocode-client
+    plan: free
+    branch: main
+    buildCommand: npm run build --workspace=client
+    publishPath: client/dist
+    envVars:
+      - key: VITE_API_URL
+        value: ""
