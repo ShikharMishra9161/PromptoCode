@@ -6,10 +6,12 @@ import rateLimit from 'express-rate-limit';
 import { env } from './config/env';
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
+import { metricsMiddleware } from './middleware/metrics';
 
 import { authRouter } from './routes/auth.routes';
 import { generateRouter } from './routes/generate.routes';
 import { historyRouter } from './routes/history.routes';
+import { metricsRouter } from './routes/metrics.routes';
 
 export const createApp = (): Application => {
   const app = express();
@@ -20,6 +22,10 @@ export const createApp = (): Application => {
     origin: env.CLIENT_URL,
     credentials: true,
   }));
+
+  // ─── Metrics Collection ────────────────────────────────────
+  // Must be early in middleware chain to track all requests
+  app.use(metricsMiddleware);
 
   // ─── Rate Limiting ─────────────────────────────────────────
   const limiter = rateLimit({
@@ -47,6 +53,7 @@ export const createApp = (): Application => {
   app.use('/api/auth', authRouter);
   app.use('/api/generate', generateRouter);
   app.use('/api/history', historyRouter);
+  app.use('/api/metrics', metricsRouter);
 
   // ─── Error Handling ────────────────────────────────────────
   app.use(notFound);

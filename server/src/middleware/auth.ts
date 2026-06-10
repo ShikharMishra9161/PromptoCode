@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { User, IUserDocument } from '../models/User.model';
 import { AppError } from './errorHandler';
+import { trackDbRead } from '../utils/dbMetrics';
 
 // ─── Extend Express Request type ──────────────────────────
 declare global {
@@ -37,6 +38,7 @@ export const protect = async (
     const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
 
     const user = await User.findById(decoded.id);
+    trackDbRead(); // Track the User.findById operation
     if (!user) {
       throw new AppError('User no longer exists', 401);
     }

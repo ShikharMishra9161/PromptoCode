@@ -5,6 +5,7 @@ import { AppError } from '../middleware/errorHandler';
 import { env } from '../config/env';
 import { RegisterInput, LoginInput } from '../validators/schemas';
 import { AuthResponseDTO, IUser } from '@aiuix/shared';
+import { trackDbRead, trackDbWrite } from '../utils/dbMetrics';
 
 // ─── Token factory ─────────────────────────────────────────
 const signToken = (id: string): string =>
@@ -27,9 +28,11 @@ export const register = async (
     const { name, email, password } = req.body;
 
     const existing = await User.findOne({ email });
+    trackDbRead(); // Track the findOne query
     if (existing) throw new AppError('Email already in use', 409);
 
     const user = await User.create({ name, email, password });
+    trackDbWrite(); // Track the create operation
     const token = signToken(user._id.toString());
 
     const response: AuthResponseDTO = { user: toUserDTO(user), token };
@@ -49,6 +52,7 @@ export const login = async (
     const { email, password } = req.body;
 
     const user = await User.findByEmail(email);
+    trackDbRead(); // Track the findByEmail query
     if (!user || !(await user.comparePassword(password))) {
       throw new AppError('Invalid email or password', 401);
     }

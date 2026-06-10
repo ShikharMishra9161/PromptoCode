@@ -4,6 +4,7 @@ import { History } from '../models/History.model';
 import { AppError } from '../middleware/errorHandler';
 import { GenerateUIInput } from '../validators/schemas';
 import { GenerateUIResponseDTO } from '@aiuix/shared';
+import { trackDbWrite } from '../utils/dbMetrics';
 
 export const generateUIController = async (
   req: Request<{}, {}, GenerateUIInput>,
@@ -30,6 +31,7 @@ export const generateUIController = async (
       explanation,
       tokensUsed,
     });
+    trackDbWrite(); // Track the History.create operation
 
     // ─── Return typed response ─────────────────────────
     const response: GenerateUIResponseDTO = {

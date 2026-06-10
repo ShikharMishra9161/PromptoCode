@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { History } from '../models/History.model';
 import { AppError } from '../middleware/errorHandler';
 import { HistoryListResponseDTO, IHistory } from '@aiuix/shared';
+import { trackDbRead, trackDbWrite } from '../utils/dbMetrics';
 
 // ─── List paginated history for current user ───────────────
 export const listHistory = async (
@@ -23,6 +24,8 @@ export const listHistory = async (
       History.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       History.countDocuments(filter),
     ]);
+    trackDbRead(); // Track History.find
+    trackDbRead(); // Track History.countDocuments
 
     const response: HistoryListResponseDTO = {
       items: items as unknown as IHistory[],
@@ -50,6 +53,7 @@ export const deleteHistory = async (
       _id: req.params.id,
       userId: req.user._id, // Ensures users can only delete their own
     });
+    trackDbWrite(); // Track the delete operation
 
     if (!entry) throw new AppError('History entry not found', 404);
 
@@ -69,10 +73,12 @@ export const toggleFavorite = async (
     if (!req.user) throw new AppError('Not authenticated', 401);
 
     const entry = await History.findOne({ _id: req.params.id, userId: req.user._id });
+    trackDbRead(); // Track the findOne query
     if (!entry) throw new AppError('History entry not found', 404);
 
     entry.isFavorite = !entry.isFavorite;
     await entry.save();
+    trackDbWrite(); // Track the save operation
 
     res.json({ success: true, data: null, message: `${entry.isFavorite ? 'Added to' : 'Removed from'} favorites` });
   } catch (error) {
