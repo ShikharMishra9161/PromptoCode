@@ -9,8 +9,9 @@ import {
   RegisterDTO,
 } from '@aiuix/shared';
 
+const baseUrl = (import.meta.env.VITE_API_URL as string) || '/api';
 const http: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: baseUrl,
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
 });

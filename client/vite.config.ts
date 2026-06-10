@@ -7,7 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@aiuix/shared': path.resolve(__dirname, '../shared/src/index.ts'),
+      '@aiuix/shared': process.env.NODE_ENV === 'development'
+        ? path.resolve(__dirname, '../shared/src/index.ts')
+        : path.resolve(__dirname, '../shared/dist/index.js'),
     },
   },
   server: {

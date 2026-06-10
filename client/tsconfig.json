@@ -15,10 +15,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["vite/client", "node"],
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@aiuix/shared": ["../shared/src/index.ts"]
     }
   },
   "include": ["src"],
